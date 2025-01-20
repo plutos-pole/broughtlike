@@ -14,5 +14,7 @@ typedef struct mapspace {
 
 
 Mapspace *init_mapspace(void);
+int      init_rooms(Mapspace *map, int n_rooms);
+int xy2flat(int y, int x);
 
 #endif
