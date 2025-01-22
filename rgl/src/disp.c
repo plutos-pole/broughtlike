@@ -6,7 +6,14 @@
 char floor_symb[] = {'.', '#', '.', '.'};
 
 
-static char get_map_symb(Mapspace *map, int row, int col) {
+static char get_map_symb(Mapspace *map, int row, int col);
+
+
+
+
+
+
+char get_map_symb(Mapspace *map, int row, int col) {
     
     return floor_symb[*(map->floor_space + xy2flat(row, col))];
 }

@@ -15,7 +15,7 @@ int main (void) {
         return 1;
     }
 
-    int failed  = init_rooms(map, 6);
+    int failed  = init_rooms(map);
     if (failed) {
         return 1;
     }
