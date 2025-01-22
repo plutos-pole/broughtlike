@@ -12,7 +12,14 @@ static int check_distance(int x1, int y1, int x2, int y2);
 static void place_rooms(Mapspace *map);
 static void fill_map(Mapspace *map);
 static void carve_rooms(Mapspace *map, int width, int height, int pos_x, int pos_y);
+static void carve_path(Mapspace *map, int x, int y);
 static void bsp_partition(Mapspace *map, int l_w, int h_w, int l_h, int h_h, int *n_rooms, int deep, int dir);
+static void make_path(Mapspace *map, int x1, int y1, int x2, int y2);
+
+enum DIR {NORTH, EAST, SOUTH, WEST};
+
+
+void connect_rooms(Mapspace *map);
 
 Mapspace *init_mapspace(void) {
     Mapspace *map = malloc(sizeof(*map));
@@ -52,6 +59,7 @@ int init_rooms(Mapspace *map) {
     int curr_rooms = 0;
     bsp_partition(map, 0, WIDTH, 0, HEIGHT, &curr_rooms, 0, 0);
     place_rooms(map);
+    connect_rooms(map);
     return 0;
 }
 
@@ -133,4 +141,63 @@ void carve_rooms(Mapspace *map, int width, int height, int pos_x, int pos_y) {
                 
             }
         }
+}
+
+void carve_path(Mapspace *map, int x, int y) {
+    int converted_pos = xy2flat(y, x);
+    *(map->floor_space + converted_pos) = FLOOR_PATH;
+}
+
+
+void make_path(Mapspace *map, int x1, int y1, int x2, int y2) {
+        int curr_distance = check_distance(x1, y1, x2, y2);
+        while (curr_distance != 0) {
+            // NORTH -> EAST -> SOUTH -> WEST
+            int dir = randRange(0, 3);
+            switch(dir) {
+                case NORTH:
+                        if (check_distance(x1, y1 - 1, x2, y2) < curr_distance) {
+                            y1 -= 1;
+                         }
+                            break;
+                case EAST:
+                        if (check_distance(x1 + 1, y1, x2, y2) < curr_distance) {
+                            x1 += 1;
+                         }
+                            break;
+                case SOUTH:
+                        if (check_distance(x1, y1 + 1, x2, y2) < curr_distance) {
+                            y1 += 1;
+                         }
+                            break;
+                case WEST:
+                         if (check_distance(x1 - 1, y1, x2, y2) < curr_distance) {
+                            x1 -= 1;
+                          }
+                            break;
+            }
+            carve_path(map, x1, y1); 
+            curr_distance = check_distance(x1, y1, x2, y2);
+        }
+}
+
+void connect_rooms(Mapspace *map) {
+    int n_rooms = map->n_rooms;
+    int min_x_mid = MIN_ROOM_W / 2;
+    int min_y_mid = MIN_ROOM_H / 2;
+
+    for (int i = 0; i < n_rooms; i++) {
+        int pos_x1, pos_y1, pos_x2, pos_y2;
+        pos_x1 = *(map->rooms_x + i);
+        pos_y1 = *(map->rooms_y + i);
+        pos_x2 = *(map->rooms_x + ((i + 1) % n_rooms));
+        pos_y2 = *(map->rooms_y + ((i + 1) % n_rooms));
+
+        int adj_x1 = pos_x1 + min_x_mid;
+        int adj_y1 = pos_y1 + min_y_mid;
+        int adj_x2 = pos_x2 + min_x_mid;
+        int adj_y2 = pos_y2 + min_y_mid;
+        
+        make_path(map, adj_x1, adj_y1, adj_x2, adj_y2);
+    }
 }
