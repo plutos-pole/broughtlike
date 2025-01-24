@@ -33,6 +33,7 @@ int main (void) {
     int ch;
     
     while (1) {
+        apply_cov(map, player);
         display_map(map);
         display_entity(player);
         ch = getch();

@@ -6,6 +6,7 @@
 typedef struct Entity {
     int x;
     int y; 
+    int cov;
     char form;
 } Entity;
 

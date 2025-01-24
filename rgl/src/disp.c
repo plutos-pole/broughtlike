@@ -4,10 +4,12 @@
 #include "../lib/player.h"
 #include <stdio.h>
 #include <ncurses.h>
+#include <stdbool.h>
 
 char floor_symb[] = {'.', '#', '.', '.'};
 
 static char get_map_symb(Mapspace *map, int row, int col);
+static bool is_visible_on(Mapspace *map, int row, int col);
 
 
 char get_map_symb(Mapspace *map, int row, int col) {
@@ -19,7 +21,9 @@ void display_map(Mapspace *map) {
     clear();
     for (int row = 0; row < HEIGHT; row++) {
         for (int col = 0; col < WIDTH; col++) {
-            mvprintw(row, col, "%c", get_map_symb(map, row, col));
+            if (is_visible_on(map, row, col)) {
+                mvprintw(row, col, "%c", get_map_symb(map, row, col));
+            }    
         }
     }
     refresh();
@@ -46,3 +50,6 @@ void kill_ncurses() {
     endwin();
 }
 
+bool is_visible_on(Mapspace *map, int row, int col) {
+    return *(map->visibility + xy2flat(row, col)) == VISIBLE;
+}

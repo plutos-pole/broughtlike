@@ -20,6 +20,7 @@ Entity *init_player(Mapspace *map) {
     player->x = offset_x;
     player->y = offset_y;
     player->form = '@';
+    player->cov = MIN_CONE_OF_VISION;
     return player; 
 
 }

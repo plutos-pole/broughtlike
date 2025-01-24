@@ -1,6 +1,7 @@
 #include "../lib/map.h"
 #include "../lib/shared.h"
 #include "../lib/rand.h"
+#include "../lib/player.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -35,6 +36,12 @@ Mapspace *init_mapspace(void) {
 
     if (map->floor_space == NULL) {
         fprintf(stderr, "Memory allocation failed for <floor_space>\n");
+    }
+
+    map->visibility = malloc(sizeof(*map->visibility) * WIDTH * HEIGHT);
+
+    if (map->visibility == NULL) {
+        fprintf(stderr, "Memory allocation failed for <map_visibility>\n");
     }
 
     map->n_rooms = 0;
@@ -73,6 +80,7 @@ int check_distance(int x1, int y1, int x2, int y2) {
 }
 void fill_map(Mapspace *map) {
     for (int i = 0; i < WIDTH * HEIGHT; i++) {
+        map->visibility[i] = INVISIBLE;
         map->floor_space[i] = FLOOR_WALL; 
     }
 }
@@ -205,3 +213,18 @@ void connect_rooms(Mapspace *map) {
 bool is_walkable(Mapspace *map, int x, int y) {
     return *(map->floor_space + xy2flat(y, x)) != FLOOR_WALL;
 }
+
+void apply_cov(Mapspace *map, Entity *ent) {
+    int cov = ent->cov;
+    int x = ent->x;
+    int y = ent->y;
+    for (int row = y - cov; row <= y + cov; row++) {
+        for (int col = x - cov; col <= x + cov; col++) {
+            if (row > 0 && row < HEIGHT && col > 0 && col < WIDTH) {
+                *(map->visibility + xy2flat(row, col)) = VISIBLE;
+            }
+        }
+    }
+
+}
+
