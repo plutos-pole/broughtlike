@@ -36,6 +36,10 @@ void display_entity(Entity *entity) {
 
 void init_ncurses() {
     initscr();
+    raw();
+    noecho();
+    keypad(stdscr, true);
+    curs_set(0);
 }
 
 void kill_ncurses() {
