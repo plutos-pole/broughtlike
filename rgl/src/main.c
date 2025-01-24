@@ -37,7 +37,26 @@ int main (void) {
         display_entity(player);
         ch = getch();
         if (ch == 'q') break;
-        
+
+        switch(ch) {
+            case 'w':
+            case 'W':
+                    move_player(map, player, player->x, player->y - 1);
+                    break;
+            case 'd':
+            case 'D':
+                    move_player(map, player, player->x + 1, player->y);
+                    break;
+            case 's':
+            case 'S':
+                    move_player(map, player, player->x, player->y + 1);
+                    break;
+            case 'a':
+            case 'A':
+                    move_player(map, player, player->x - 1, player->y);
+                    break;
+
+       } 
     }
     kill_ncurses();
 }

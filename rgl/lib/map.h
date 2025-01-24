@@ -16,5 +16,6 @@ typedef struct mapspace {
 Mapspace *init_mapspace(void);
 int      init_rooms(Mapspace *map);
 int xy2flat(int y, int x);
+bool is_walkable(Mapspace *map, int x, int y);
 
 #endif

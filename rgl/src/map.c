@@ -201,3 +201,7 @@ void connect_rooms(Mapspace *map) {
         make_path(map, adj_x1, adj_y1, adj_x2, adj_y2);
     }
 }
+
+bool is_walkable(Mapspace *map, int x, int y) {
+    return *(map->floor_space + xy2flat(y, x)) != FLOOR_WALL;
+}

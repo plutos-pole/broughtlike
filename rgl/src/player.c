@@ -24,3 +24,9 @@ Entity *init_player(Mapspace *map) {
 
 }
 
+void move_player(Mapspace *map, Entity *player, const int n_x, const int n_y) {
+    if (is_walkable(map, n_x, n_y)) {
+        player->x = n_x;
+        player->y = n_y;
+    }
+}
