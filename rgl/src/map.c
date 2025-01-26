@@ -7,6 +7,9 @@
 #include <stdbool.h>
 
 
+#include "ncurses.h"
+
+
 
 
 static int check_distance(int x1, int y1, int x2, int y2);
@@ -16,6 +19,7 @@ static void carve_rooms(Mapspace *map, int width, int height, int pos_x, int pos
 static void carve_path(Mapspace *map, int x, int y);
 static void bsp_partition(Mapspace *map, int l_w, int h_w, int l_h, int h_h, int *n_rooms, int deep, int dir);
 static void make_path(Mapspace *map, int x1, int y1, int x2, int y2);
+static void reveal_tiles(Mapspace *map, int cx, int cy, int max_cov);
 
 enum DIR {NORTH, EAST, SOUTH, WEST};
 
@@ -214,17 +218,36 @@ bool is_walkable(Mapspace *map, int x, int y) {
     return *(map->floor_space + xy2flat(y, x)) != FLOOR_WALL;
 }
 
+
+void reveal_tiles(Mapspace *map, int cx, int cy, int max_cov) {
+    // Out of the map
+    if (cx < 0 || cx >= WIDTH || cy < 0 || cy >= HEIGHT || max_cov < 0) {
+        return;
+    }
+    // If it's a wall, then we want to bounce, mark it and return  
+    if (is_walkable(map, cx, cy) == false) {
+        *(map->visibility + xy2flat(cy, cx)) = VISIBLE;
+        return;
+    }
+    // If it's a path, then simply mark it
+    if (is_walkable(map, cx, cy)) {
+        *(map->visibility + xy2flat(cy, cx)) = VISIBLE;
+    }
+    // 8-way DFS
+    reveal_tiles(map, cx, cy - 1, max_cov - 1);
+    reveal_tiles(map, cx + 1, cy, max_cov - 1);
+    reveal_tiles(map, cx, cy + 1, max_cov - 1);
+    reveal_tiles(map, cx - 1, cy, max_cov - 1);
+    reveal_tiles(map, cx - 1, cy - 1, max_cov - 1);
+    reveal_tiles(map, cx + 1, cy + 1, max_cov - 1);
+    reveal_tiles(map, cx - 1, cy + 1, max_cov - 1);
+    reveal_tiles(map, cx + 1, cy - 1, max_cov - 1);
+}
+
 void apply_cov(Mapspace *map, Entity *ent) {
     int cov = ent->cov;
     int x = ent->x;
     int y = ent->y;
-    for (int row = y - cov; row <= y + cov; row++) {
-        for (int col = x - cov; col <= x + cov; col++) {
-            if (row > 0 && row < HEIGHT && col > 0 && col < WIDTH) {
-                *(map->visibility + xy2flat(row, col)) = VISIBLE;
-            }
-        }
-    }
-
+    reveal_tiles(map, x, y, cov);
 }
 
