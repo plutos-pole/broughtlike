@@ -10,7 +10,7 @@ char floor_symb[] = {'.', '#', '.', '.'};
 
 static char get_map_symb(Mapspace *map, int row, int col);
 static bool is_visible_on(Mapspace *map, int row, int col);
-
+static void clear_section(int x, int y);
 
 char get_map_symb(Mapspace *map, int row, int col) {
     
@@ -60,7 +60,10 @@ void inspect_mode(Mapspace *map, int x, int y) {
     curs_set(1);
     
     while ((ch = getch()) != 'q') {
-        
+        // Clearing the message part
+         clear_section(10, 40);
+         move(y, x);
+
         switch(ch) {
             
             case 'w':
@@ -91,9 +94,21 @@ void inspect_mode(Mapspace *map, int x, int y) {
                         move(y, x);
                       }
                         break;
+            case 'i': {
+                         move(40, 10);
+                         printw("%s", inspect_map(map, x, y));
+                         move(y, x); 
+                         break;
+            }
          }
          refresh();
     }
     curs_set(0);
 
+}
+
+void clear_section(int x, int y) {
+    // Message box area
+    move(y, x);
+    clrtoeol();
 }

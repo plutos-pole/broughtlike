@@ -254,3 +254,11 @@ void apply_cov(Mapspace *map, Entity *ent) {
 bool in_bounds(int x, int y) {
     return (x > 0 && x < WIDTH && y > 0 && y < HEIGHT);
 }
+
+char *inspect_map(Mapspace *map, int x, int y) {
+    char *info;
+    if (*(map->visibility + xy2flat(y, x)) == INVISIBLE) {
+        info = "Nothingness...for now";
+    }
+    return info;
+}
