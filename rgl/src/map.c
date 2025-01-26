@@ -251,3 +251,6 @@ void apply_cov(Mapspace *map, Entity *ent) {
     reveal_tiles(map, x, y, cov);
 }
 
+bool in_bounds(int x, int y) {
+    return (x > 0 && x < WIDTH && y > 0 && y < HEIGHT);
+}

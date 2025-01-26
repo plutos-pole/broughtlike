@@ -53,3 +53,47 @@ void kill_ncurses() {
 bool is_visible_on(Mapspace *map, int row, int col) {
     return *(map->visibility + xy2flat(row, col)) == VISIBLE;
 }
+
+void inspect_mode(Mapspace *map, int x, int y) {
+    char ch;
+    move(y, x);
+    curs_set(1);
+    
+    while ((ch = getch()) != 'q') {
+        
+        switch(ch) {
+            
+            case 'w':
+            case 'W':
+                      if (in_bounds(x, y - 1)) { 
+                        y -= 1;
+                        move(y, x);
+                      }
+                        break;
+            case 'd':
+            case 'D':
+                      if (in_bounds(x + 1, y)) { 
+                        x += 1;
+                        move(y, x);
+                      }
+                        break;
+            case 's':
+            case 'S':
+                      if (in_bounds(x, y + 1)) { 
+                        y += 1;
+                        move(y, x);
+                      }
+                        break;
+            case 'a':
+            case 'A':
+                      if (in_bounds(x - 1, y)) { 
+                        x -= 1;
+                        move(y, x);
+                      }
+                        break;
+         }
+         refresh();
+    }
+    curs_set(0);
+
+}

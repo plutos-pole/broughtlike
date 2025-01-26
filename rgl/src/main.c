@@ -56,6 +56,9 @@ int main (void) {
             case 'A':
                     move_player(map, player, player->x - 1, player->y);
                     break;
+            case 'l':
+                    inspect_mode(map, player->x, player->y);
+                    break;
 
        } 
     }
