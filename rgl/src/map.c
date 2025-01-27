@@ -69,6 +69,20 @@ Mapspace *init_mapspace(void) {
     return map;
 }
 
+void destroy_mapspace(Mapspace *map) {
+
+    for (int i = 0; i < WIDTH * HEIGHT; i++) {
+        if (*(map->entities + i) != NULL) {
+           free(*(map->entities + i));
+        }
+    }
+    free(map->visibility);
+    free(map->floor_space);
+    free(map->rooms_x);
+    free(map->rooms_y);
+    free(map);
+}
+
 int init_rooms(Mapspace *map) {
     map->n_rooms = MAX_ROOMS;
     

@@ -63,4 +63,6 @@ int main (void) {
        } 
     }
     kill_ncurses();
+    destroy_player(player);
+    destroy_mapspace(map);
 }
