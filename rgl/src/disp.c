@@ -61,7 +61,7 @@ void inspect_mode(Mapspace *map, int x, int y) {
     
     while ((ch = getch()) != 'q') {
         // Clearing the message part
-         clear_section(10, 40);
+         clear_section(10, 30);
          move(y, x);
 
         switch(ch) {
@@ -94,12 +94,12 @@ void inspect_mode(Mapspace *map, int x, int y) {
                         move(y, x);
                       }
                         break;
-            case 'i': {
-                         move(40, 10);
+            case 'i': { 
+                         move(30, 10);
                          printw("%s", inspect_map(map, x, y));
                          move(y, x); 
                          break;
-            }
+                      } 
          }
          refresh();
     }

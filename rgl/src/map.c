@@ -284,6 +284,5 @@ char *inspect_map(Mapspace *map, int x, int y) {
     }
     //info = map->entities[pos]->description;
     // TODO: check for decoration
-    
     return "Not sure yet";
 }
