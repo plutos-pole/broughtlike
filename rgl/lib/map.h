@@ -17,6 +17,7 @@ typedef struct Mapspace {
 
 
 Mapspace *init_mapspace(void);
+void destroy_mapspace(Mapspace *map);
 int      init_rooms(Mapspace *map);
 int xy2flat(int y, int x);
 bool in_bounds(int x, int y);

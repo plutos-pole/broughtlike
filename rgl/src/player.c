@@ -36,6 +36,13 @@ Entity *init_player(Mapspace *map) {
 
 }
 
+void destroy_player(Entity *player) {
+    // destroy_map should destroy all entities,
+    // including the player. So there's no need to destroy it twice as
+    // free(player)
+    free(player->description);
+}
+
 void move_player(Mapspace *map, Entity *player, const int n_x, const int n_y) {
     if (is_entity(map, n_x, n_y)) {
     //TODO attack(); 
