@@ -8,6 +8,7 @@ typedef struct Entity {
     int y; 
     int cov;
     char form;
+    char *description;
 } Entity;
 
 void display_player(Entity *player);

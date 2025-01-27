@@ -48,6 +48,18 @@ Mapspace *init_mapspace(void) {
         fprintf(stderr, "Memory allocation failed for <map_visibility>\n");
     }
 
+    // Entities matrix
+    
+    map->entities = malloc(sizeof(*map->entities) * WIDTH * HEIGHT);
+
+    if (map->entities == NULL) {
+        fprintf(stderr, "Memory allocation failed for <map_entities>\n");
+    }
+    // FIXME:
+    for (int i = 0; i < WIDTH * HEIGHT; i++) {
+        map->entities[i] = NULL;
+    }
+
     map->n_rooms = 0;
     map->rooms_x = NULL;
     map->rooms_y = NULL;
@@ -255,10 +267,23 @@ bool in_bounds(int x, int y) {
     return (x > 0 && x < WIDTH && y > 0 && y < HEIGHT);
 }
 
+bool is_entity(Mapspace *map, int x, int y) {
+    return map->entities[xy2flat(y, x)] != NULL;
+}
+
 char *inspect_map(Mapspace *map, int x, int y) {
-    char *info;
     if (*(map->visibility + xy2flat(y, x)) == INVISIBLE) {
-        info = "Nothingness...for now";
+        return "Nothingness...for now";
     }
-    return info;
+    // TODO: check for Entities
+    // TODO: check for Items
+    // TODO: check for player
+    //int pos = xy2flat(y, x);
+    if (map->entities[xy2flat(y, x)] != NULL) {
+        return map->entities[xy2flat(y, x)]->description;
+    }
+    //info = map->entities[pos]->description;
+    // TODO: check for decoration
+    
+    return "Not sure yet";
 }
