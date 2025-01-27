@@ -11,6 +11,8 @@
 #define MAX_ROOMS 8
 #define MIN_CONE_OF_VISION 1
 
+#define MAX_DESCRIPTION 100
+
 enum floor_type {FLOOR_OPEN, FLOOR_WALL, FLOOR_PATH, FLOOR_ROOM};
 enum vis_type {INVISIBLE, VISIBLE};
 extern char floor_symb[];

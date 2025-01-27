@@ -2,6 +2,7 @@
 #include "../lib/shared.h"
 #include "../lib/rand.h"
 #include "../lib/player.h"
+#include "../lib/entity.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -299,4 +300,33 @@ char *inspect_map(Mapspace *map, int x, int y) {
     //info = map->entities[pos]->description;
     // TODO: check for decoration
     return "Not sure yet";
+}
+
+
+Entity **spawn_enemies(Mapspace *map, int lvl) {
+    // Something to do with a level, to adjust number of enemies
+    // for example: num_enemies = lvl * ... * BASE_NUM_OF_ENEMIES
+    int n_of_e = lvl;
+    map->num_enemies = n_of_e;
+    Entity **enemies = create_entities(n_of_e);    
+    int x, y;
+    bool not_found_pos;
+    for (int i = 0; i < n_of_e; i++) {
+        not_found_pos = true;
+
+        while (not_found_pos) {
+            x = randRange(1, WIDTH - 1);
+            y = randRange(1, HEIGHT - 1);
+
+            if (map->floor_space[xy2flat(y, x)] == FLOOR_PATH && map->entities[xy2flat(y, x)] == NULL) {
+                not_found_pos = false;
+
+                enemies[i]->x = x;
+                enemies[i]->y = y;
+                map->entities[xy2flat(y, x)] = enemies[i];
+            }
+
+         }
+    }
+    return enemies;
 }

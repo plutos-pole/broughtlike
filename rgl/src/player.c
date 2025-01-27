@@ -28,6 +28,10 @@ Entity *init_player(Mapspace *map) {
     
     player->x = offset_x;
     player->y = offset_y;
+
+    player->health = 25;
+    player->attack = 1;
+
     player->form = '@';
     player->cov = MIN_CONE_OF_VISION;
     player->description = strdup("I'm the might warrior of death"); 

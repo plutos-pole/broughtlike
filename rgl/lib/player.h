@@ -1,15 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include "map.h"
+#include "entity.h"
 
-
-typedef struct Entity {
-    int x;
-    int y; 
-    int cov;
-    char form;
-    char *description;
-} Entity;
 
 void display_player(Entity *player);
 Entity *init_player(Mapspace *map);

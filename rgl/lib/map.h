@@ -13,6 +13,7 @@ typedef struct Mapspace {
     int n_rooms;
     int *rooms_x;
     int *rooms_y;
+    int num_enemies;
 } Mapspace;
 
 
@@ -25,5 +26,6 @@ void apply_cov(Mapspace *map, struct Entity *ent);
 char *inspect_map(Mapspace *map, int x, int y);
 bool is_walkable(Mapspace *map, int x, int y);
 bool is_entity(Mapspace *map, int x, int y); 
+struct Entity **spawn_enemies(Mapspace *map, int lvl);
 
 #endif

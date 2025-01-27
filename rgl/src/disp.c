@@ -38,6 +38,20 @@ void display_entity(Entity *entity) {
 
 }
 
+void display_entities(Entity **entities, Mapspace *map) {
+    int ent_x, ent_y;
+    for (int i = 0; i < map->num_enemies; i++) {
+
+        ent_x = entities[i]->x;
+        ent_y = entities[i]->y;
+
+        if (*(map->visibility + xy2flat(ent_y, ent_x)) == VISIBLE) {
+
+             display_entity(entities[i]);
+        }
+    }
+}
+
 void init_ncurses() {
     initscr();
     raw();

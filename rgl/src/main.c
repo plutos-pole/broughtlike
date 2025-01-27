@@ -26,7 +26,8 @@ int main (void) {
     if (player == NULL) {
         return 1;
     }
-
+    
+    Entity **enemies_group = spawn_enemies(map, 5);
 
     init_ncurses();
     
@@ -35,6 +36,7 @@ int main (void) {
     while (1) {
         apply_cov(map, player);
         display_map(map);
+        display_entities(enemies_group, map);
         display_entity(player);
         ch = getch();
         if (ch == 'q') break;
