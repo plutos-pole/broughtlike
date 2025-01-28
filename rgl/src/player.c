@@ -34,7 +34,7 @@ Entity *init_player(Mapspace *map) {
 
     player->form = '@';
     player->cov = MIN_CONE_OF_VISION;
-    player->description = strdup("I'm the might warrior of death"); 
+    strcpy(player->description, "That's actually you");
     map->entities[xy2flat(player->y, player->x)] = player;
     return player; 
 

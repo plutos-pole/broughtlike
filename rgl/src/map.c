@@ -32,6 +32,7 @@ Mapspace *init_mapspace(void) {
 
     if (map == NULL) {
         fprintf(stderr, "Memory allocation failed for <map>\n");
+        free(map);
     }
 
     map->w = WIDTH;
@@ -41,12 +42,14 @@ Mapspace *init_mapspace(void) {
 
     if (map->floor_space == NULL) {
         fprintf(stderr, "Memory allocation failed for <floor_space>\n");
+        free(map->floor_space);
     }
 
     map->visibility = malloc(sizeof(*map->visibility) * WIDTH * HEIGHT);
 
     if (map->visibility == NULL) {
         fprintf(stderr, "Memory allocation failed for <map_visibility>\n");
+        free(map->visibility);
     }
 
     // Entities matrix
@@ -55,6 +58,7 @@ Mapspace *init_mapspace(void) {
 
     if (map->entities == NULL) {
         fprintf(stderr, "Memory allocation failed for <map_entities>\n");
+        free(map->entities);
     }
     // FIXME:
     for (int i = 0; i < WIDTH * HEIGHT; i++) {
@@ -71,12 +75,14 @@ Mapspace *init_mapspace(void) {
 }
 
 void destroy_mapspace(Mapspace *map) {
-
     for (int i = 0; i < WIDTH * HEIGHT; i++) {
-        if (*(map->entities + i) != NULL) {
-           free(*(map->entities + i));
+        if (map->entities[i] != NULL) {
+           free(map->entities[i]->description);
+           free(map->entities[i]);
         }
     }
+    
+    free(map->entities);
     free(map->visibility);
     free(map->floor_space);
     free(map->rooms_x);
